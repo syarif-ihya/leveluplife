@@ -41,7 +41,7 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 
 # Server jalan di http://127.0.0.1:8000
-```bash
+```
 
 
 ---
@@ -65,7 +65,7 @@ uvicorn app.main:app --reload
 | Backend Dev | M Dzhafa Abdurahman | [@xx](#) |
 | Database Engineer | Aghniya Rizki Amalia | [@xx](#) |
 | UI/UX Designer | Fathi Khasyi | [@xx](#) |
-```markdown
+```
 
 
 ## 📚 Documentation
