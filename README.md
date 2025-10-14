@@ -1,5 +1,5 @@
-# LevelUpLife 🌱
-**LevelUpLife** is a gamified web app designed to help users improve their real-life skills and habits through quest-based progression and XP rewards.
+# Level Up Life 🌱
+**Level Up Life** is a gamified web app designed to help users improve their real-life skills and habits through quest-based progression and XP rewards.
 
 This project combines:
 - 🎨 Frontend: React + Vite + TailwindCSS  
@@ -13,6 +13,7 @@ This project combines:
 - User authentication (login/register)
 
 ## 🏗️ Project Structure
+
 leveluplife/
 ├─ frontend/       # React + Vite + Tailwind
 ├─ backend/        # FastAPI (Python)
@@ -24,16 +25,23 @@ leveluplife/
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/username/leveluplife.git
+git clone https://github.com/syarif-ihya/leveluplife.git
 cd leveluplife
 
 cd frontend
 npm install
 npm run dev
 
-cd ../backend
-pip install fastapi uvicorn
-uvicorn main:app --reload
+cd backend
+python -m venv venv
+venv\Scripts\activate    # (Windows)
+# source venv/bin/activate  # (Mac/Linux)
+
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+
+# Server jalan di http://127.0.0.1:8000
+```bash
 
 
 ---
@@ -52,11 +60,16 @@ uvicorn main:app --reload
 ## 👥 Team Members
 | Role | Name | GitHub |
 |------|------|---------|
-| Project Manager | Syarif_Ihya_Izzuddin | [@syarifdev](https://github.com/syarifdev) |
-| Frontend Dev | Aurel_Arta_Ghani | [@xx](#) |
-| Backend Dev | M_Dzhafa_Abdurahman | [@xx](#) |
-| Database Engineer | Aghniya_Rizki_Amalia | [@xx](#) |
-| UI/UX Designer | Fathi_Khasyi | [@xx](#) |
+| Project Manager | Syarif Ihya Izzuddin | [@syarifdev](https://github.com/syarifdev) |
+| Frontend Dev | Aurel Arta Ghani | [@xx](#) |
+| Backend Dev | M Dzhafa Abdurahman | [@xx](#) |
+| Database Engineer | Aghniya Rizki Amalia | [@xx](#) |
+| UI/UX Designer | Fathi Khasyi | [@xx](#) |
+```markdown
+
 
 ## 📚 Documentation
 All additional notes, wireframes, and flowcharts can be found in the `/docs` folder.
+
+## 💡 Notes
+This project is built for learning and portfolio purposes as part of the LevelUpLife initiative.
