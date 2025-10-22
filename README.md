@@ -55,6 +55,7 @@ uvicorn app.main:app --reload
 | GET | `/api/users` | Get all users |
 | POST | `/api/achievments` | Add a new achievment |
 | GET | `/api/rewards` | Get reward list |
+```
 
 
 ## 👥 Team Members
@@ -65,7 +66,6 @@ uvicorn app.main:app --reload
 | Backend Dev | M Dzhafa Abdurahman | [@xx](#) |
 | Database Engineer | Aghniya Rizki Amalia | [@xx](#) |
 | UI/UX Designer | Fathi Khasyi | [@xx](#) |
-```
 
 
 ## 📚 Documentation

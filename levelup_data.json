@@ -1,0 +1,34 @@
+{
+  "users": {
+    "shirin": {
+      "password": "12345678",
+      "level": 1,
+      "xp": 35,
+      "total_xp": 35,
+      "achievements": [
+        {
+          "title": "Berhasil setup projek prpl",
+          "category": "Discipline",
+          "difficulty": "sedang",
+          "xp": 25,
+          "date": "2025-10-22 15:13:28"
+        },
+        {
+          "title": "Mengajak Orang Lain menggunakan aplikasi",
+          "category": "Social",
+          "difficulty": "mudah",
+          "xp": 10,
+          "date": "2025-10-22 15:14:41"
+        }
+      ],
+      "attributes": {
+        "Intellect": 0,
+        "Creativity": 0,
+        "Vitality": 0,
+        "Discipline": 25,
+        "Social": 10,
+        "Wealth": 0
+      }
+    }
+  }
+}
