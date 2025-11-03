@@ -2,9 +2,9 @@
   "users": {
     "shirin": {
       "password": "12345678",
-      "level": 1,
+      "level": 999,
       "xp": 35,
-      "total_xp": 35,
+      "total_xp": 135,
       "achievements": [
         {
           "title": "Berhasil setup projek prpl",
@@ -19,10 +19,17 @@
           "difficulty": "mudah",
           "xp": 10,
           "date": "2025-10-22 15:14:41"
+        },
+        {
+          "title": "Menghack progress",
+          "category": "Intellect",
+          "difficulty": "sangat sulit",
+          "xp": 100,
+          "date": "2025-10-22 15:29:50"
         }
       ],
       "attributes": {
-        "Intellect": 0,
+        "Intellect": 100,
         "Creativity": 0,
         "Vitality": 0,
         "Discipline": 25,
