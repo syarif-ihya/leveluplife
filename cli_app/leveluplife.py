@@ -32,3 +32,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+else:
+    print(__name__)
+
+# Setiap file python itu ada variabel __name__ yang kegunaanya sebagai status atau identitas dari file yang sedang dijalankan (sepengatuanku dari penjelasan chatgpt)
+# intinya setiap file bakal mengoreksi __name__, jika dijalankan langsung maka __name__ == __main__
+# tapi kalo dijalanin via import maka __name__ nya bukan main tapi sesuai nama file itu sendiri
