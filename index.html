@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level Up Life</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 min-h-screen text-white">
+    
+    <!-- Auth Section -->
+    <div id="authSection" class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 w-full max-w-md shadow-2xl">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Level Up Life</h1>
+                <p class="text-gray-300">Tingkatkan kualitas hidupmu!</p>
+            </div>
+            
+            <div id="loginForm">
+                <h2 class="text-2xl font-semibold mb-6">Login</h2>
+                <input type="email" id="loginEmail" placeholder="Email" class="w-full p-3 mb-4 bg-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400">
+                <input type="password" id="loginPassword" placeholder="Password" class="w-full p-3 mb-6 bg-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400">
+                <button onclick="login()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 p-3 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition">Login</button>
+                <p class="text-center mt-4 text-gray-300">Belum punya akun? <span onclick="showRegister()" class="text-purple-400 cursor-pointer hover:underline">Daftar</span></p>
+            </div>
+            
+            <div id="registerForm" class="hidden">
+                <h2 class="text-2xl font-semibold mb-6">Registrasi</h2>
+                <input type="text" id="regName" placeholder="Nama" class="w-full p-3 mb-4 bg-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400">
+                <input type="email" id="regEmail" placeholder="Email" class="w-full p-3 mb-4 bg-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400">
+                <input type="password" id="regPassword" placeholder="Password" class="w-full p-3 mb-6 bg-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400">
+                <button onclick="register()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 p-3 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition">Daftar</button>
+                <p class="text-center mt-4 text-gray-300">Sudah punya akun? <span onclick="showLogin()" class="text-purple-400 cursor-pointer hover:underline">Login</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Section -->
+    <div id="appSection" class="hidden">
+        <!-- Header -->
+        <header class="bg-black/30 backdrop-blur-lg border-b border-white/10">
+            <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Level Up Life</h1>
+                <button onclick="logout()" class="bg-red-500/80 px-4 py-2 rounded-lg hover:bg-red-600 transition">Logout</button>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-8">
+            <!-- Player Stats -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-8 shadow-xl">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-3xl font-bold" id="playerName">Player</h2>
+                        <p class="text-purple-300">Level <span id="playerLevel">1</span></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-4xl font-bold text-yellow-400" id="playerXP">0</p>
+                        <p class="text-gray-300">XP</p>
+                    </div>
+                </div>
+                <div class="w-full bg-white/20 rounded-full h-4 mb-2">
+                    <div id="xpBar" class="bg-gradient-to-r from-purple-500 to-pink-500 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <p class="text-sm text-gray-300 text-center"><span id="currentXP">0</span> / <span id="nextLevelXP">100</span> XP</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Achievement Form -->
+                <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-2xl font-bold mb-6">Tambah Pencapaian</h3>
+                    <input type="text" id="achievementTitle" placeholder="Judul Pencapaian" class="w-full p-3 mb-4 bg-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400">
+                    <textarea id="achievementDesc" placeholder="Deskripsi" rows="3" class="w-full p-3 mb-4 bg-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"></textarea>
+                    
+                    <select id="achievementCategory" class="w-full p-3 mb-4 bg-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400">
+                        <option value="">Pilih Kategori</option>
+                        <option value="Intellect">Intellect (Pengetahuan)</option>
+                        <option value="Creativity">Creativity (Kreativitas)</option>
+                        <option value="Vitality">Vitality (Kesehatan)</option>
+                        <option value="Discipline">Discipline (Disiplin)</option>
+                        <option value="Social">Social (Sosial)</option>
+                        <option value="Wealth">Wealth (Finansial)</option>
+                    </select>
+                    
+                    <select id="achievementDifficulty" class="w-full p-3 mb-6 bg-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400">
+                        <option value="">Pilih Kesulitan</option>
+                        <option value="easy">Mudah (10 XP)</option>
+                        <option value="medium">Sedang (25 XP)</option>
+                        <option value="hard">Sulit (50 XP)</option>
+                        <option value="expert">Sangat Sulit (100 XP)</option>
+                    </select>
+                    
+                    <button onclick="addAchievement()" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 p-3 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-600 transition">
+                        + Tambah Pencapaian
+                    </button>
+                </div>
+
+                <!-- Radar Chart -->
+                <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-2xl font-bold mb-6 text-center">Atribut Karakter</h3>
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Achievements List -->
+            <div class="mt-8 bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-xl">
+                <h3 class="text-2xl font-bold mb-6">Riwayat Pencapaian</h3>
+                <div id="achievementsList" class="space-y-4">
+                    <p class="text-gray-400 text-center py-8">Belum ada pencapaian. Mulai catat pencapaianmu!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Structure
+        let currentUser = null;
+        let users = JSON.parse(localStorage.getItem('levelUpLifeUsers')) || {};
+        let radarChart = null;
+
+        const xpPerLevel = {
+            1: 100,
+            2: 200,
+            3: 300,
+            4: 500,
+            5: 750,
+            6: 1000
+        };
+
+        const difficultyXP = {
+            easy: 10,
+            medium: 25,
+            hard: 50,
+            expert: 100
+        };
+
+        // Auth Functions
+        function showRegister() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+        }
+
+        function register() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            if (!name || !email || !password) {
+                alert('Mohon isi semua field!');
+                return;
+            }
+
+            if (users[email]) {
+                alert('Email sudah terdaftar!');
+                return;
+            }
+
+            users[email] = {
+                name,
+                password,
+                level: 1,
+                totalXP: 0,
+                currentXP: 0,
+                attributes: {
+                    Intellect: 0,
+                    Creativity: 0,
+                    Vitality: 0,
+                    Discipline: 0,
+                    Social: 0,
+                    Wealth: 0
+                },
+                achievements: []
+            };
+
+            localStorage.setItem('levelUpLifeUsers', JSON.stringify(users));
+            alert('Registrasi berhasil! Silakan login.');
+            showLogin();
+        }
+
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                alert('Mohon isi email dan password!');
+                return;
+            }
+
+            if (!users[email] || users[email].password !== password) {
+                alert('Email atau password salah!');
+                return;
+            }
+
+            currentUser = email;
+            localStorage.setItem('levelUpLifeCurrentUser', email);
+            showApp();
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('levelUpLifeCurrentUser');
+            document.getElementById('appSection').classList.add('hidden');
+            document.getElementById('authSection').classList.remove('hidden');
+        }
+
+        function showApp() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('appSection').classList.remove('hidden');
+            updateUI();
+            initRadarChart();
+        }
+
+        // App Functions
+        function addAchievement() {
+            const title = document.getElementById('achievementTitle').value;
+            const desc = document.getElementById('achievementDesc').value;
+            const category = document.getElementById('achievementCategory').value;
+            const difficulty = document.getElementById('achievementDifficulty').value;
+
+            if (!title || !category || !difficulty) {
+                alert('Mohon isi semua field!');
+                return;
+            }
+
+            const xpReward = difficultyXP[difficulty];
+            const achievement = {
+                id: Date.now(),
+                title,
+                description: desc,
+                category,
+                difficulty,
+                xpReward,
+                date: new Date().toLocaleDateString('id-ID')
+            };
+
+            users[currentUser].achievements.push(achievement);
+            users[currentUser].totalXP += xpReward;
+            users[currentUser].currentXP += xpReward;
+            users[currentUser].attributes[category] += xpReward;
+
+            // Level up check
+            while (users[currentUser].currentXP >= getNextLevelXP()) {
+                users[currentUser].currentXP -= getNextLevelXP();
+                users[currentUser].level++;
+                showLevelUpAnimation();
+            }
+
+            localStorage.setItem('levelUpLifeUsers', JSON.stringify(users));
+
+            // Clear form
+            document.getElementById('achievementTitle').value = '';
+            document.getElementById('achievementDesc').value = '';
+            document.getElementById('achievementCategory').value = '';
+            document.getElementById('achievementDifficulty').value = '';
+
+            updateUI();
+            updateRadarChart();
+        }
+
+        function deleteAchievement(id) {
+            if (!confirm('Hapus pencapaian ini?')) return;
+
+            const achievement = users[currentUser].achievements.find(a => a.id === id);
+            users[currentUser].achievements = users[currentUser].achievements.filter(a => a.id !== id);
+            users[currentUser].totalXP -= achievement.xpReward;
+            users[currentUser].currentXP -= achievement.xpReward;
+            users[currentUser].attributes[achievement.category] -= achievement.xpReward;
+
+            localStorage.setItem('levelUpLifeUsers', JSON.stringify(users));
+            updateUI();
+            updateRadarChart();
+        }
+
+        function getNextLevelXP() {
+            const level = users[currentUser].level;
+            return xpPerLevel[level] || (level * 100);
+        }
+
+        function showLevelUpAnimation() {
+            alert(`🎉 Level Up! Sekarang kamu Level ${users[currentUser].level}!`);
+        }
+
+        function updateUI() {
+            const user = users[currentUser];
+            document.getElementById('playerName').textContent = user.name;
+            document.getElementById('playerLevel').textContent = user.level;
+            document.getElementById('playerXP').textContent = user.totalXP;
+            document.getElementById('currentXP').textContent = user.currentXP;
+            
+            const nextLevelXP = getNextLevelXP();
+            document.getElementById('nextLevelXP').textContent = nextLevelXP;
+            
+            const progress = (user.currentXP / nextLevelXP) * 100;
+            document.getElementById('xpBar').style.width = progress + '%';
+
+            // Update achievements list
+            const listContainer = document.getElementById('achievementsList');
+            if (user.achievements.length === 0) {
+                listContainer.innerHTML = '<p class="text-gray-400 text-center py-8">Belum ada pencapaian. Mulai catat pencapaianmu!</p>';
+            } else {
+                listContainer.innerHTML = user.achievements.map(a => `
+                    <div class="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-purple-400 transition">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-lg">${a.title}</h4>
+                                <p class="text-gray-300 text-sm">${a.description || '-'}</p>
+                            </div>
+                            <button onclick="deleteAchievement(${a.id})" class="text-red-400 hover:text-red-300 ml-4">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="flex gap-2 flex-wrap mt-2">
+                            <span class="bg-purple-500/30 px-3 py-1 rounded-full text-xs">${a.category}</span>
+                            <span class="bg-blue-500/30 px-3 py-1 rounded-full text-xs">${a.difficulty}</span>
+                            <span class="bg-yellow-500/30 px-3 py-1 rounded-full text-xs">+${a.xpReward} XP</span>
+                            <span class="bg-gray-500/30 px-3 py-1 rounded-full text-xs">${a.date}</span>
+                        </div>
+                    </div>
+                `).reverse().join('');
+            }
+        }
+
+        function initRadarChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            const user = users[currentUser];
+            
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Intellect', 'Creativity', 'Vitality', 'Discipline', 'Social', 'Wealth'],
+                    datasets: [{
+                        label: 'Atribut Saya',
+                        data: [
+                            user.attributes.Intellect,
+                            user.attributes.Creativity,
+                            user.attributes.Vitality,
+                            user.attributes.Discipline,
+                            user.attributes.Social,
+                            user.attributes.Wealth
+                        ],
+                        backgroundColor: 'rgba(168, 85, 247, 0.2)',
+                        borderColor: 'rgba(168, 85, 247, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(168, 85, 247, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(168, 85, 247, 1)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            pointLabels: {
+                                color: 'white',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateRadarChart() {
+            if (!radarChart) return;
+            
+            const user = users[currentUser];
+            radarChart.data.datasets[0].data = [
+                user.attributes.Intellect,
+                user.attributes.Creativity,
+                user.attributes.Vitality,
+                user.attributes.Discipline,
+                user.attributes.Social,
+                user.attributes.Wealth
+            ];
+            radarChart.update();
+        }
+
+        // Check if user is already logged in
+        window.onload = function() {
+            const savedUser = localStorage.getItem('levelUpLifeCurrentUser');
+            if (savedUser && users[savedUser]) {
+                currentUser = savedUser;
+                showApp();
+            }
+        };
+    </script>
+</body>
+</html>
