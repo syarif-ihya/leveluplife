@@ -27,20 +27,6 @@ leveluplife/
 ```bash
 git clone https://github.com/syarif-ihya/leveluplife.git
 cd leveluplife
-
-cd frontend
-npm install
-npm run dev
-
-cd backend
-python -m venv venv
-venv\Scripts\activate    # (Windows)
-# source venv/bin/activate  # (Mac/Linux)
-
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-
-# Server jalan di http://127.0.0.1:8000
 ```
 
 
