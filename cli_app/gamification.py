@@ -135,6 +135,8 @@ def view_profile(user_id):
 
 # view achievement
 def view_achievement(user_id):
-    _, achievement = data_user_achievement(user_id)
+    user, achievement = data_user_achievement(user_id)
 
-    return achievement[['text', 'difficulty', 'category', 'datetime']]
+    name = user['nama_user']
+
+    return name, achievement[['text', 'difficulty', 'category', 'datetime']]
