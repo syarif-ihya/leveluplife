@@ -89,10 +89,5 @@ def process_achievement(user_id, difficulty):
     with open("cli_app/data/user.csv", "w") as file:
         file.writelines(line)
     
+    print(file)
     return xp, level
-
-    
-
-
-
-
