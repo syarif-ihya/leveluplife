@@ -1,1 +1,0 @@
-print("ngerjainnya alis ngebuat appnya disini aja ges!")
