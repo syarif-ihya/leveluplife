@@ -1,8 +1,4 @@
 user_id,title,text,difficulty,kategori
-1,hayoyoooo,mudah,intellect1, y, mudah, intellect2, yh, sulit, intellect
-4, ok, sulit, creative
-1, y, mudah, intellect
-1, a, aa, Mudah, 10, 1
 1, p, pp, Sedang, Creativity
 1, a, asdf, Sedang, Creativity
 1, e, eee, Sangat Sulit, Dicipline
@@ -16,3 +12,4 @@ user_id,title,text,difficulty,kategori
 1, cek lagi pls bener, Sangat Sulit, Intellect
 1, bismillah bener , Sangat Sulit, Vitality
 1, next, Sangat Sulit, Vitality
+1, XXX, bla bla bla, Sulit, Social
