@@ -1,6 +1,6 @@
 # print("ngerjainnya alis ngebuat appnya disini aja ges!")
 
-from gamification import add_achievement, process_achievement
+from gamification import add_achievement, process_achievement, view_profile, view_achievement
 
 u = 1
 text = str(input("text:"))
@@ -9,3 +9,5 @@ kat = int(input("kat:"))
 
 print(add_achievement(u, text, diff, kat))
 print(process_achievement(u, diff))
+print(view_profile(u))
+print(view_achievement(u))
