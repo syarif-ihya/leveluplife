@@ -1,4 +1,4 @@
-user_id,title,text,difficulty,kategori
+user_id,text,difficulty,kategori,datetime
 1, p, pp, Sedang, Creativity
 1, a, asdf, Sedang, Creativity
 1, e, eee, Sangat Sulit, Dicipline
@@ -13,3 +13,9 @@ user_id,title,text,difficulty,kategori
 1, bismillah bener , Sangat Sulit, Vitality
 1, next, Sangat Sulit, Vitality
 1, XXX, bla bla bla, Sulit, Social
+1, ow, Sangat Sulit, Intellect, 2025-12-16 13:14:27.179304,
+1, yhh, Sedang, Intellect, 2025-12-16 13:17:01.396216,
+1, ok, Sulit, Vitality, 2025-12-16 13:18:45,
+1, uy, Sedang, Creativity, 2025-12-16 15:05:40,
+1, yey, Sedang, Creativity, 2025-12-16 15:09:54
+1, yey, Sedang, Creativity, 2025-12-16 15:10:19

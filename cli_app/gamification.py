@@ -1,4 +1,5 @@
 import pandas as pd
+from datetime import datetime 
 
 # add achievement
 def add_achievement(user_id, text, difficulty, category):
@@ -38,8 +39,10 @@ def add_achievement(user_id, text, difficulty, category):
     if (i == len(category_type)) or (i > len(category_type)):
         return "Kategori tidak valid!"
     
+    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
     with open("cli_app/data/data_achievement.csv", "a") as file:
-        file.write(f"{user_id}, {text}, {d_selected}, {category}\n")
+        file.write(f"{user_id}, {text}, {d_selected}, {category}, {date}\n")
         return "Data telah tersimpan!"
 
 
@@ -82,12 +85,31 @@ def process_achievement(user_id, difficulty):
         data = line[i].strip().split(",")
 
         if int(data[0]) == user_id:
-            line[i] = (data[0] + "," + data[1] + "," + str(level) + "," + str(xp) + "\n")
+            line[i] = (data[0] + "," + data[1] + "," + str(level) + "," + str(xp)+ "\n")
             break
         i += 1
 
     with open("cli_app/data/user.csv", "w") as file:
         file.writelines(line)
     
-    print(file)
     return xp, level
+
+
+# view profile
+def view_profile(user_id):
+    csvUser = pd.read_csv("cli_app/data/user.csv")
+    csvAchi = pd.read_csv("cli_app/data/data_achievement.csv")
+
+    csvFilterUser = csvUser[csvUser['user_id'] == user_id]
+    csvFilterAchi = csvAchi[csvAchi['user_id'] == user_id]
+
+    name = csvFilterUser['nama_user']
+    level = csvFilterUser['level']
+    xp = csvFilterUser['xp']
+
+    text = csvFilterAchi['text']
+    difficulty = csvFilterAchi['difficulty']
+    category = csvFilterAchi['kategori']
+    date = csvFilterAchi['datetime']
+
+    return name, level, xp, text, difficulty, category, date
