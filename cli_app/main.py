@@ -1,3 +1,4 @@
+# main.py
 # print("ngerjainnya alis ngebuat appnya disini aja ges!")
 
 from gamification import add_achievement
