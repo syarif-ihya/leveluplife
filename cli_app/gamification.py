@@ -3,6 +3,31 @@ import pandas as pd
 import csv
 from datetime import datetime 
 
+# Utility Function
+def xp_required(level):
+    return 50 + (level * 25)
+
+def update_attribute(user_id, category, xp_gain):
+    rows = []
+
+    with open("cli_app/data/data_attribute.csv", "r") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            if int(row["user_id"]) == user_id and row["attribute"] == category:
+                row["xp"] = int(row["xp"]) + xp_gain
+
+                while row["xp"] >= xp_required(int(row["level"])):
+                    row["xp"] -= xp_required(int(row["level"]))
+                    row["level"] = int(row["level"]) + 1
+
+            rows.append(row)
+
+    with open("cli_app/data/data_attribute.csv", "w", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 # add achievement
 def add_achievement(user_id, text, difficulty, category):
     difficulty_type = {
@@ -46,7 +71,16 @@ def add_achievement(user_id, text, difficulty, category):
     with open("cli_app/data/data_achievement.csv", "a", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow([user_id, text, d_selected, category, date])
-        return "Data telah tersimpan!"
+
+    # 2️⃣ update attribute (PROGRESS)
+    update_attribute(user_id, category, difficulty_type[d_selected])
+
+    return {
+        "status": True,
+        "message": "Achievement tersimpan & attribute bertambah",
+        "attribute": category,
+        "xp_gained": difficulty_type[d_selected]
+    }
 
 
 # proses XP achievement
@@ -130,7 +164,7 @@ def view_profile(user_id):
         "nama" : name,
         "level" : level,
         "xp" : xp,
-        "total" : total_achi
+        "total achievements" : total_achi
     }
 
 
