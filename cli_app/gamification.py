@@ -1,4 +1,5 @@
 import pandas as pd
+import csv
 from datetime import datetime 
 
 # add achievement
@@ -41,8 +42,9 @@ def add_achievement(user_id, text, difficulty, category):
     
     date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    with open("cli_app/data/data_achievement.csv", "a") as file:
-        file.write(f"{user_id}, {text}, {d_selected}, {category}, {date}\n")
+    with open("cli_app/data/data_achievement.csv", "a", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow([user_id, text, d_selected, category, date])
         return "Data telah tersimpan!"
 
 
@@ -55,7 +57,7 @@ def process_achievement(user_id, difficulty):
         "Sangat Sulit": 100
     }
 
-    max_xp = 1000
+    max_xp = 100
 
     d_index = difficulty - 1
     keys = list(difficulty_type.values())
@@ -92,24 +94,49 @@ def process_achievement(user_id, difficulty):
     with open("cli_app/data/user.csv", "w") as file:
         file.writelines(line)
     
-    return xp, level
+    return {
+        "xp" : xp,
+        "level" : level
+    }
+
+
+# data user-achievement
+def data_user_achievement(user_id):
+    csvUser = pd.read_csv("cli_app/data/user.csv")
+    csvAchi = pd.read_csv("cli_app/data/data_achievement.csv")
+
+    user = csvUser[csvUser['user_id'] == user_id].iloc[0]
+    achievement = csvAchi[csvAchi['user_id'] == user_id]
+
+    return user, achievement
 
 
 # view profile
 def view_profile(user_id):
-    csvUser = pd.read_csv("cli_app/data/user.csv")
-    csvAchi = pd.read_csv("cli_app/data/data_achievement.csv")
+    user, achievement = data_user_achievement(user_id)
+    
+    name = user['nama_user']
+    level = int(user['level'])
+    xp = int(user['total_xp'])
 
-    csvFilterUser = csvUser[csvUser['user_id'] == user_id]
-    csvFilterAchi = csvAchi[csvAchi['user_id'] == user_id]
+    total_achi = len(achievement)
+    
+    max_xp = 100
+    progress = xp % max_xp 
+    progress = (progress / max_xp) * 100 
 
-    name = csvFilterUser['nama_user']
-    level = csvFilterUser['level']
-    xp = csvFilterUser['xp']
+    return {
+        "nama" : name,
+        "level" : level,
+        "xp" : xp,
+        "total" : total_achi
+    }
 
-    text = csvFilterAchi['text']
-    difficulty = csvFilterAchi['difficulty']
-    category = csvFilterAchi['kategori']
-    date = csvFilterAchi['datetime']
 
-    return name, level, xp, text, difficulty, category, date
+# view achievement
+def view_achievement(user_id):
+    user, achievement = data_user_achievement(user_id)
+
+    name = user['nama_user']
+
+    return name, achievement[['text', 'difficulty', 'category', 'datetime']]
