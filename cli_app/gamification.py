@@ -10,22 +10,27 @@ def xp_required(level):
 def update_attribute(user_id, category, xp_gain):
     rows = []
 
-    with open("data/data_attribute.csv", "r") as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            if int(row["user_id"]) == user_id and row["attribute"] == category:
-                row["xp"] = int(row["xp"]) + xp_gain
+    try:
+        with open("data/data_attribute.csv", "r") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                if int(row["user_id"]) == user_id and row["attribute"] == category:
+                    row["xp"] = int(row["xp"]) + xp_gain
 
-                while row["xp"] >= xp_required(int(row["level"])):
-                    row["xp"] -= xp_required(int(row["level"]))
-                    row["level"] = int(row["level"]) + 1
+                    while row["xp"] >= xp_required(int(row["level"])):
+                        row["xp"] -= xp_required(int(row["level"]))
+                        row["level"] = int(row["level"]) + 1
 
-            rows.append(row)
+                rows.append(row)
 
-    with open("data/data_attribute.csv", "w", newline="") as file:
-        writer = csv.DictWriter(file, fieldnames=rows[0].keys())
-        writer.writeheader()
-        writer.writerows(rows)
+        if rows:
+            with open("data/data_attribute.csv", "w", newline="") as file:
+                writer = csv.DictWriter(file, fieldnames=rows[0].keys())
+                writer.writeheader()
+                writer.writerows(rows)
+
+    except FileNotFoundError:
+        pass  # file belum ada → abaikan (aman untuk MVP)
 
 
 # add achievement
@@ -39,100 +44,60 @@ def add_achievement(user_id, text, difficulty, category):
 
     category_type = ['Intellect', 'Creativity', 'Vitality', 'Dicipline', 'Social', 'Wealth']
     
-    if not (text and difficulty and category):
-        return "Data tidak lengkap!"
+    if not text:
+        return {"status": False, "message": "Nama achievement tidak boleh kosong"}
 
-    d_index = difficulty - 1
-    keys = list(difficulty_type.keys())
+    if difficulty not in [1,2,3,4]:
+        return {"status": False, "message": "Tingkat kesulitan tidak valid"}
 
-    i = 0
-    while i < len(keys):
-        if i == d_index:
-            d_selected = keys[i]
-            break
-        i+=1
+    if category not in [1,2,3,4,5,6]:
+        return {"status": False, "message": "Kategori tidak valid"}
 
-    if (i == len(keys)) or (i > len(keys)):
-        return "Tingkat kesulitan tidak valid!"
-    
-    c_index = category - 1
-    j = 0
-    while j < len(category_type):
-        if j == c_index:
-            category = category_type[j]
-            break
-        j+=1
-
-    if (i == len(category_type)) or (i > len(category_type)):
-        return "Kategori tidak valid!"
-    
+    d_selected = list(difficulty_type.keys())[difficulty - 1]
+    category = category_type[category - 1]
     date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    with open("data/data_achievement.csv", "a", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow([user_id, text, d_selected, category, date])
 
-    # 2️⃣ update attribute (PROGRESS)
-    update_attribute(user_id, category, difficulty_type[d_selected])
+    try:
+        with open("data/data_achievement.csv", "a", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow([user_id, text, d_selected, category, date])
 
-    return {
-        "status": True,
-        "message": "Achievement tersimpan & attribute bertambah",
-        "attribute": category,
-        "xp_gained": difficulty_type[d_selected]
-    }
+        update_attribute(user_id, category, difficulty_type[d_selected])
+
+        return {
+            "status": True,
+            "message": "Achievement tersimpan & attribute bertambah",
+            "attribute": category,
+            "xp_gained": difficulty_type[d_selected]
+        }
+
+    except Exception:
+        return {"status": False, "message": "Gagal menyimpan achievement"}
 
 
 # proses XP achievement
 def process_achievement(user_id, difficulty):
-    difficulty_type = {
-        "Mudah": 10,
-        "Sedang": 25,
-        "Sulit": 50,
-        "Sangat Sulit": 100
-    }
+    difficulty_type = [10, 25, 50, 100]
 
-    max_xp = 100
-
-    d_index = difficulty - 1
-    keys = list(difficulty_type.values())
-
-    if (d_index == len(keys)) or (d_index > len(keys)):
-        return "Tingkat kesulitan tidak valid!"
+    if difficulty not in [1,2,3,4]:
+        return
 
     csvUser = pd.read_csv("data/user.csv")
-    csvFilterID = csvUser[csvUser['user_id'] == user_id]
+    user_row = csvUser[csvUser['user_id'] == user_id]
 
-    csvFilter = csvFilterID.filter(items=['level','total_xp'])
+    if user_row.empty:
+        return
 
-    achievement_values = keys[d_index]
-    current_xp = int(csvFilter['total_xp'].iloc[0])
+    current_xp = user_row['total_xp'].iloc[0]
+    if pd.isna(current_xp):
+        current_xp = 0
 
-    xp = current_xp + achievement_values
+    xp = int(current_xp) + difficulty_type[difficulty - 1]
+    level = xp // 100
+
     csvUser.loc[csvUser['user_id'] == user_id, "total_xp"] = xp
-
-    level = xp // max_xp 
     csvUser.loc[csvUser['user_id'] == user_id, "level"] = level
-
-    with open("data/user.csv", "r") as file:
-        line = file.readlines()
-
-    i = 1
-    while i < len(line) :
-        data = line[i].strip().split(",")
-
-        if int(data[0]) == user_id:
-            line[i] = (data[0] + "," + data[1] + "," + str(level) + "," + str(xp)+ "\n")
-            break
-        i += 1
-
-    with open("data/user.csv", "w") as file:
-        file.writelines(line)
-    
-    return {
-        "xp" : xp,
-        "level" : level
-    }
+    csvUser.to_csv("data/user.csv", index=False)
 
 
 # data user-achievement
@@ -149,29 +114,28 @@ def data_user_achievement(user_id):
 # view profile
 def view_profile(user_id):
     user, achievement = data_user_achievement(user_id)
-    
-    name = user['nama_user']
-    level = int(user['level'])
-    xp = int(user['total_xp'])
 
-    total_achi = len(achievement)
-    
-    max_xp = 100
-    progress = xp % max_xp 
-    progress = (progress / max_xp) * 100 
+    xp = user['total_xp']
+    xp = 0 if pd.isna(xp) else int(xp)
 
     return {
-        "nama" : name,
-        "level" : level,
-        "xp" : xp,
-        "total achievements" : total_achi
+        "nama": user['nama_user'],
+        "level": int(user['level']),
+        "xp": xp,
+        "total achievements": len(achievement)
     }
 
 
 # view achievement
 def view_achievement(user_id):
     user, achievement = data_user_achievement(user_id)
-
     name = user['nama_user']
 
-    return name, achievement[['text', 'difficulty', 'category', 'datetime']]
+    if achievement.empty:
+        return name, None
+
+    achievement_view = achievement[['text', 'difficulty', 'category', 'datetime']]
+    achievement_view = achievement_view.reset_index(drop=True)
+    achievement_view.index = achievement_view.index + 1
+
+    return name, achievement_view
