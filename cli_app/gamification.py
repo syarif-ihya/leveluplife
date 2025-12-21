@@ -10,7 +10,7 @@ def xp_required(level):
 def update_attribute(user_id, category, xp_gain):
     rows = []
 
-    with open("cli_app/data/data_attribute.csv", "r") as file:
+    with open("data/data_attribute.csv", "r") as file:
         reader = csv.DictReader(file)
         for row in reader:
             if int(row["user_id"]) == user_id and row["attribute"] == category:
@@ -22,7 +22,7 @@ def update_attribute(user_id, category, xp_gain):
 
             rows.append(row)
 
-    with open("cli_app/data/data_attribute.csv", "w", newline="") as file:
+    with open("data/data_attribute.csv", "w", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=rows[0].keys())
         writer.writeheader()
         writer.writerows(rows)
@@ -68,7 +68,7 @@ def add_achievement(user_id, text, difficulty, category):
     
     date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    with open("cli_app/data/data_achievement.csv", "a", newline="", encoding="utf-8") as file:
+    with open("data/data_achievement.csv", "a", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow([user_id, text, d_selected, category, date])
 
@@ -100,7 +100,7 @@ def process_achievement(user_id, difficulty):
     if (d_index == len(keys)) or (d_index > len(keys)):
         return "Tingkat kesulitan tidak valid!"
 
-    csvUser = pd.read_csv("cli_app/data/user.csv")
+    csvUser = pd.read_csv("data/user.csv")
     csvFilterID = csvUser[csvUser['user_id'] == user_id]
 
     csvFilter = csvFilterID.filter(items=['level','total_xp'])
@@ -114,7 +114,7 @@ def process_achievement(user_id, difficulty):
     level = xp // max_xp 
     csvUser.loc[csvUser['user_id'] == user_id, "level"] = level
 
-    with open("cli_app/data/user.csv", "r") as file:
+    with open("data/user.csv", "r") as file:
         line = file.readlines()
 
     i = 1
@@ -126,7 +126,7 @@ def process_achievement(user_id, difficulty):
             break
         i += 1
 
-    with open("cli_app/data/user.csv", "w") as file:
+    with open("data/user.csv", "w") as file:
         file.writelines(line)
     
     return {
@@ -137,8 +137,8 @@ def process_achievement(user_id, difficulty):
 
 # data user-achievement
 def data_user_achievement(user_id):
-    csvUser = pd.read_csv("cli_app/data/user.csv")
-    csvAchi = pd.read_csv("cli_app/data/data_achievement.csv")
+    csvUser = pd.read_csv("data/user.csv")
+    csvAchi = pd.read_csv("data/data_achievement.csv")
 
     user = csvUser[csvUser['user_id'] == user_id].iloc[0]
     achievement = csvAchi[csvAchi['user_id'] == user_id]

@@ -1,29 +1,58 @@
 # main.py
-# print("ngerjainnya alis ngebuat appnya disini aja ges!")
-
-from gamification import add_achievement, process_achievement, view_profile, view_achievement
 from auth import register, login
-from gamification import add_achievement, view_profile
+from gamification import add_achievement, view_profile, view_achievement
 
-# status, msg = register("Shirin", "12345678")
-# print(msg)
+def main():
+    print("=== LEVEL UP LIFE CLI ===")
 
-status, user = login("Shirin", "1234")
-if status:
-    print('Login Berhasil')
+    username = input("Username: ")
+    password = input("Password: ")
+
+    status, user = login(username, password)
+
+    if not status:
+        print("Login gagal:", user)
+        return
+
+    print("Login berhasil!")
     user_id = int(user["user_id"])
-    add_achievement(user_id, "Belajar Python", 2, 1)
-    print(view_profile(user_id))
 
+    while True:
+        print("\nMenu:")
+        print("1. Tambah Achievement")
+        print("2. Lihat Profile")
+        print("3. Lihat Achievement")
+        print("4. Keluar")
 
-    u = 1
-    text = str(input("text:"))
-    diff = int(input("diff:"))
-    kat = int(input("kat:"))
+        choice = input("Pilih: ")
 
-    print(add_achievement(u, text, diff, kat))
-    print(process_achievement(u, diff))
-    print(view_profile(u))
-    print(view_achievement(u))
-else :
-    print('Login Gagal')
+        if choice == "1":
+            text = input("Nama achievement: ")
+            print("Difficulty: 1.Mudah 2.Sedang 3.Sulit 4.Sangat Sulit")
+            diff = int(input("Pilih: "))
+            print("Category: 1.Intellect 2.Creativity 3.Vitality 4.Dicipline 5.Social 6.Wealth")
+            kat = int(input("Pilih: "))
+
+            result = add_achievement(user_id, text, diff, kat)
+            print(result["message"])
+
+        elif choice == "2":
+            profile = view_profile(user_id)
+            print("\n--- PROFILE ---")
+            for k, v in profile.items():
+                print(f"{k}: {v}")
+
+        elif choice == "3":
+            name, ach = view_achievement(user_id)
+            print(f"\n--- Achievement {name} ---")
+            print(ach)
+
+        elif choice == "4":
+            print("Keluar dari aplikasi.")
+            break
+
+        else:
+            print("Pilihan tidak valid")
+
+if __name__ == "__main__":
+    main()

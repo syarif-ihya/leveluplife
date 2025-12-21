@@ -1,6 +1,6 @@
 import csv
 
-USER_DATA = "cli_app/data/user.csv"
+USER_DATA = "data/user.csv"
 
 def read_users():
     with open(USER_DATA, newline="", encoding="utf-8") as f:
