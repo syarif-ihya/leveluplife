@@ -1,6 +1,6 @@
 import csv
 
-USER_DATA = "cli_app/data/user.csv"
+USER_DATA  = "cli_app/data/user.csv"
 ATTRIBUTE_DATA = "cli_app/data/data_attribute.csv"
 
 def read_users():
@@ -28,15 +28,16 @@ def initialize_user_attributes(user_id):
 def register(username, password):
     users = read_users()
 
+    # Cek username dengan case-insensitive
     for u in users:
-        if u["nama_user"] == username:
+        if u["nama_user"].lower() == username.lower():
             return False, "Username sudah ada"
 
     new_id = max(int(u["user_id"]) for u in users) + 1 if users else 1
 
     new_user = {
         "user_id": new_id,
-        "nama_user": username,
+        "nama_user": username,  # Simpan sesuai input user
         "password": password,
         "level": 1,
         "total_xp": 0
@@ -75,8 +76,9 @@ def check_and_create_attributes(user_id):
 def login(username, password):
     users = read_users()
 
+    # Login dengan case-insensitive untuk username
     for u in users:
-        if u["nama_user"] == username and u["password"] == password:
+        if u["nama_user"].lower() == username.lower() and u["password"] == password:
             user_id = int(u["user_id"])
             
             # Cek dan buat attributes jika belum ada (untuk user lama)
@@ -87,3 +89,5 @@ def login(username, password):
             return True, u
 
     return False, "Username atau password salah"
+
+print('')
