@@ -1,6 +1,6 @@
 # main.py
-from auth import register, login
-from gamification import add_achievement, view_profile, view_achievement
+from auth import register, login, email_validator
+from gamification import add_achievement, view_profile, view_achievement 
 
 def main():
     while True:
@@ -9,7 +9,7 @@ def main():
         print("2. Register")
         print("3. Keluar")
         
-        choice = input("Pilih: ")
+        choice = input("Pilih Menu (1-3): ")
         
         if choice == "1":
             # Login
@@ -75,10 +75,11 @@ def main():
         
         elif choice == "2":
             # Register
-            username = input("Username baru: ")
-            password = input("Password baru: ")
-            
-            status, message = register(username, password)
+            username = input("Masukan Username: ")
+            password = input("Masukan Password: ")
+            email = input("Masukan Email: ")
+
+            status, message = register(username, password, email)
             
             if status:
                 print("Registrasi berhasil! Silakan login.")
