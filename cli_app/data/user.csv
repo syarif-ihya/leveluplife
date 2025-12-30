@@ -6,4 +6,5 @@ user_id,nama_user,password,level,total_xp,email
 5,shirin,12345678,11,310,
 6,Syarif,1234,1,0,
 7,rin,12345678,2,75,
-8,Test,123,3,25,
+8,Test,123,3,100,
+9,testos,os,1,0,ostest@gmail.com

@@ -41,3 +41,7 @@ user_id,text,difficulty,category,datetime
 5,hello,Sangat Sulit,Intellect,2025-12-23 17:47:56
 8,1,Sangat Sulit,Vitality,2025-12-29 16:15:30
 8,Terbang,Sangat Sulit,Creativity,2025-12-29 16:18:46
+8,Ultra Triathlon in 30 min,Sangat Sulit,Vitality,2025-12-30 16:39:00
+8,Running while sleeping,Sangat Sulit,Intellect,2025-12-30 17:49:54
+8,Bench 100kg,Sedang,Vitality,2025-12-30 17:53:11
+8,New Deadlift PR (130kg),Sulit,Vitality,2025-12-30 17:55:31
