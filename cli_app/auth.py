@@ -23,7 +23,16 @@ def username_validator(username):
         return False, "Username hanya boleh berisi huruf, angka, dan underscore (_)"
 
     return True, username
+
+def password_validator(password):
+    if not password:
+        return False, "Password tidak boleh kosong"
     
+    if not re.match(r"^[a-zA-Z0-9_]+$", password):
+        return False, "Password hanya boleh berisi huruf, angka, dan underscore (_)"
+    
+    return True, password
+
 def read_users():
     with open(USER_DATA, newline="", encoding="utf-8") as f:
         return list(csv.DictReader(f))
@@ -55,6 +64,13 @@ def register(username, password, email):
     
     username = result
 
+    valid, result = password_validator(password)
+    if not valid:
+        return False, result
+
+    if not email_validator(email):
+        return False, "Tolong masukan email yang sesuai"
+
     # Cek username dengan case-insensitive
     for u in users:
         if u["nama_user"].lower() == username.lower():
@@ -62,11 +78,7 @@ def register(username, password, email):
         if u["email"].lower() == email.lower():
             return False, "Email sudah terdaftar"
         
-
     new_id = max(int(u["user_id"]) for u in users) + 1 if users else 1
-
-    if not email_validator(email):
-        return False, "Tolong masukan email yang sesuai"
 
     new_user = {
         "user_id": new_id,
