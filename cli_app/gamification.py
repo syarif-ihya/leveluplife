@@ -123,7 +123,7 @@ def process_achievement(user_id, difficulty):
     
     # Tulis kembali
     with open("cli_app/data/user.csv", "w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=["user_id", "nama_user", "password", "level", "total_xp"])
+        writer = csv.DictWriter(file, fieldnames=["user_id", "nama_user", "password", "level", "total_xp", "email"])
         writer.writeheader()
         writer.writerows(users)
     
