@@ -1,7 +1,7 @@
 # main.py
 from auth import register, login
 from gamification import add_achievement, view_profile, view_achievement
-from cli_utils import clear
+from cli_utils import clear, divider, header
 
 clear()
 
@@ -11,7 +11,8 @@ def main():
         print("1. Login")
         print("2. Register")
         print("3. Keluar")
-        
+        divider()
+
         choice = input("Pilih Menu (1-3): ")
         
         if choice == "1":
@@ -37,6 +38,7 @@ def main():
                 print("2. Lihat Profile")
                 print("3. Lihat Achievement")
                 print("4. Logout")
+                divider()
                 
                 menu_choice = input("Pilih Menu (1-4): ")
                 
@@ -67,7 +69,7 @@ def main():
                                 print(f"  {attr_name}: {attr_info}")
                         else:
                             print(f"{k}: {v}")
-                
+                    divider()
                 elif menu_choice == "3":
                     clear()
 
@@ -79,10 +81,14 @@ def main():
                         print("Belum ada achievement.")
                 
                 elif menu_choice == "4":
+                    clear()
+
                     print("Logout berhasil.")
                     break
                 
                 else:
+                    clear()
+                    
                     print("Pilihan tidak valid")
         
         elif choice == "2":
@@ -105,6 +111,8 @@ def main():
             break
         
         else:
+            clear()
+
             print("Pilihan tidak valid")
 
 if __name__ == "__main__":
