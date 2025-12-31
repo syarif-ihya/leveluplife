@@ -46,8 +46,8 @@ def main():
                     clear()
 
                     text = input("Nama achievement: ")
-                    print("Difficulty: 1.Mudah 2.Sedang 3.Sulit")
-                    diff = int(input("Pilih (1-3): "))
+                    print("Difficulty: 1.Mudah 2.Sedang 3.Sulit 4.Sangat Sulit")
+                    diff = int(input("Pilih (1-4): "))
                     print("Category: 1.Intellect 2.Creativity 3.Vitality 4.Discipline 5.Social 6.Wealth")
                     kat = int(input("Pilih Kategori (1-6): "))
                     
@@ -65,7 +65,6 @@ def main():
                     header("PROFILE")
                     print(f"Nama         : {profile['nama']}")
                     print(f"Level        : {profile['level']}")
-                    print(f"Total XP     : {profile['total_xp']}")
                     print(f"Progress     : {profile['progress_to_next']}")
                     print(f"Achievements : {profile['total_achievements']}")
                     

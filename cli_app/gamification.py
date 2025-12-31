@@ -43,7 +43,7 @@ def add_achievement(user_id, text, difficulty, category):
         "Mudah": 10,
         "Sedang": 25,
         "Sulit": 50,
-        # "Sangat Sulit": 100
+        "Sangat Sulit": 100
     }
 
     category_type = ['Intellect', 'Creativity', 'Vitality', 'Discipline', 'Social', 'Wealth']
@@ -91,7 +91,7 @@ def process_achievement(user_id, difficulty):
         1: 10,   # Mudah
         2: 25,   # Sedang
         3: 50,   # Sulit
-        # 4: 100   # Sangat Sulit
+        4: 100   # Sangat Sulit
     }
 
     if difficulty not in difficulty_type:
