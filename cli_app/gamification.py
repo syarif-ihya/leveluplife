@@ -43,7 +43,7 @@ def add_achievement(user_id, text, difficulty, category):
         "Mudah": 10,
         "Sedang": 25,
         "Sulit": 50,
-        "Sangat Sulit": 100
+        # "Sangat Sulit": 100
     }
 
     category_type = ['Intellect', 'Creativity', 'Vitality', 'Discipline', 'Social', 'Wealth']
@@ -91,7 +91,7 @@ def process_achievement(user_id, difficulty):
         1: 10,   # Mudah
         2: 25,   # Sedang
         3: 50,   # Sulit
-        4: 100   # Sangat Sulit
+        # 4: 100   # Sangat Sulit
     }
 
     if difficulty not in difficulty_type:
@@ -165,8 +165,15 @@ def view_profile(user_id):
                 attr_level = int(row["level"])
                 attr_xp = int(row["xp"])
                 attr_xp_needed = xp_required(attr_level)
+                attr_progress_pct = (attr_xp / attr_xp_needed) * 100
                 
-                attributes[attr_name] = f"Lv.{attr_level} ({attr_xp}/{attr_xp_needed} XP)"
+                # Simpan info lengkap untuk progress bar
+                attributes[attr_name] = {
+                    "level": attr_level,
+                    "xp": attr_xp,
+                    "xp_needed": attr_xp_needed,
+                    "progress_pct": attr_progress_pct
+                }
 
     return {
         "nama": name,

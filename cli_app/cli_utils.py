@@ -14,3 +14,11 @@ def divider():
 
 def pause():
     input("\nPress Enter to continue...")
+
+    
+def progress_bar(current, total, width=20):
+    """Membuat visual progress bar"""
+    progress = current / total
+    filled = int(width * progress)
+    bar = "█" * filled + "░" * (width - filled)
+    return f"[{bar}]"

@@ -1,7 +1,7 @@
 # main.py
 from auth import register, login
 from gamification import add_achievement, view_profile, view_achievement
-from cli_utils import clear, divider, header
+from cli_utils import clear, divider, header, progress_bar
 
 clear()
 
@@ -46,8 +46,8 @@ def main():
                     clear()
 
                     text = input("Nama achievement: ")
-                    print("Difficulty: 1.Mudah 2.Sedang 3.Sulit 4.Sangat Sulit")
-                    diff = int(input("Pilih: "))
+                    print("Difficulty: 1.Mudah 2.Sedang 3.Sulit")
+                    diff = int(input("Pilih (1-3): "))
                     print("Category: 1.Intellect 2.Creativity 3.Vitality 4.Discipline 5.Social 6.Wealth")
                     kat = int(input("Pilih Kategori (1-6): "))
                     
@@ -61,15 +61,27 @@ def main():
                 elif menu_choice == "2":
                     clear()
                     profile = view_profile(user_id)
-                    print("\n--- PROFILE ---")
-                    for k, v in profile.items():
-                        if k == "attributes":
-                            print("\n=== ATTRIBUTES ===")
-                            for attr_name, attr_info in v.items():
-                                print(f"  {attr_name}: {attr_info}")
-                        else:
-                            print(f"{k}: {v}")
+                    
+                    header("PROFILE")
+                    print(f"Nama         : {profile['nama']}")
+                    print(f"Level        : {profile['level']}")
+                    print(f"Total XP     : {profile['total_xp']}")
+                    print(f"Progress     : {profile['progress_to_next']}")
+                    print(f"Achievements : {profile['total_achievements']}")
+                    
+                    print("\n=== ATTRIBUTES ===")
+                    for attr_name, attr_info in profile["attributes"].items():
+                        level = attr_info["level"]
+                        xp = attr_info["xp"]
+                        xp_needed = attr_info["xp_needed"]
+                        
+                        bar = progress_bar(xp, xp_needed, width=20)
+                        
+                        print(f"\n{attr_name:<12} Lv.{level}")
+                        print(f"  {bar} {xp}/{xp_needed} XP")
+                    
                     divider()
+
                 elif menu_choice == "3":
                     clear()
 
