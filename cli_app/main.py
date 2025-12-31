@@ -44,20 +44,47 @@ def main():
                 
                 if menu_choice == "1":
                     clear()
+                    print(f"\n--- Tambah Achievement ---")
+                    
+                    while True:
+                        text = input("Nama achievement: ")
+                        if text.strip(): 
+                            break
+                        print("Teks achievement tidak boleh kosong!")
 
-                    text = input("Nama achievement: ")
-                    print("Difficulty: 1.Mudah 2.Sedang 3.Sulit 4.Sangat Sulit")
-                    diff = int(input("Pilih (1-4): "))
-                    print("Category: 1.Intellect 2.Creativity 3.Vitality 4.Discipline 5.Social 6.Wealth")
-                    kat = int(input("Pilih Kategori (1-6): "))
+                    while True:
+                        print("\nDifficulty: 1.Mudah 2.Sedang 3.Sulit 4.Sangat Sulit")
+                        diff = input("Pilih (1-4): ")
+                        if not diff.strip():
+                            print("Tingkat kesulitan tidak boleh kosong!")
+                            continue
+                        if not diff.isdigit(): 
+                            print("Input harus berupa angka!")
+                            continue
+                        break
+
+                    while True:
+                        print("\nCategory: 1.Intellect 2.Creativity 3.Vitality 4.Discipline 5.Social 6.Wealth")
+                        kat = input("Pilih Kategori (1-6): ")
+                        if not kat.strip():
+                            print("Kategori tidak boleh kosong!")
+                            continue
+                        if not kat.isdigit():
+                            print("Input harus berupa angka!")
+                            continue
+                        break
                     
                     clear()
 
                     result = add_achievement(user_id, text, diff, kat)
-                    print(result["message"])
-                    if result["status"]:
+
+                    if not result["status"]:
+                        print(f"\n{result['message']}")
+                    else:
+                        print(f"\n{result['message']}")
                         print(f"XP gained: {result['xp_gained']} ({result['attribute']})")
-                
+                        divider()
+
                 elif menu_choice == "2":
                     clear()
                     profile = view_profile(user_id)

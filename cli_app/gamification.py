@@ -48,9 +48,16 @@ def add_achievement(user_id, text, difficulty, category):
 
     category_type = ['Intellect', 'Creativity', 'Vitality', 'Discipline', 'Social', 'Wealth']
     
-    if not (text and difficulty and category):
-        return {"status": False, "message": "Data tidak lengkap!", "attribute": "", "xp_gained": 0}
+    if not text or str(text).strip() == "":
+        return {"status": False, "message": "Teks achievement tidak boleh kosong!", "attribute": "", "xp_gained": 0}
+    
+    if not str(difficulty).strip():
+        return {"status": False, "message": "Tingkat kesulitan tidak boleh kosong!", "attribute": "", "xp_gained": 0}
 
+    if not str(difficulty).isdigit():
+        return {"status": False, "message": "Input harus berupa angka!", "attribute": "", "xp_gained": 0}
+    
+    difficulty = int(difficulty)
     d_index = difficulty - 1
     keys = list(difficulty_type.keys())
 
@@ -59,6 +66,10 @@ def add_achievement(user_id, text, difficulty, category):
     
     d_selected = keys[d_index]
     
+    if not str(category).isdigit():
+        return {"status": False, "message": "Input harus berupa angka!", "attribute": "", "xp_gained": 0}
+    
+    category = int(category)
     c_index = category - 1
     if c_index < 0 or c_index >= len(category_type):
         return {"status": False, "message": "Kategori tidak valid!", "attribute": "", "xp_gained": 0}
