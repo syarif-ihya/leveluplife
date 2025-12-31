@@ -68,7 +68,7 @@ def main():
                     print(f"Progress     : {profile['progress_to_next']}")
                     print(f"Achievements : {profile['total_achievements']}")
                     
-                    print("\n=== ATTRIBUTES ===")
+                    print("\n====== ATTRIBUTES ======")
                     for attr_name, attr_info in profile["attributes"].items():
                         level = attr_info["level"]
                         xp = attr_info["xp"]
@@ -105,8 +105,8 @@ def main():
         elif choice == "2":
             # Register
             username = input("Masukan Username: ")
-            password = input("Masukan Password: ")
             email = input("Masukan Email: ")
+            password = input("Masukan Password: ")
 
             status, message = register(username, password, email)
             
