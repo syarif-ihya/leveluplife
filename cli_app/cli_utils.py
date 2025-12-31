@@ -4,6 +4,7 @@ def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
 def header(title):
+    print()
     print("=" * 40)
     print(title.center(40))
     print("=" * 40)

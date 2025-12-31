@@ -1,10 +1,37 @@
 import csv
+import re
 
 USER_DATA  = "cli_app/data/user.csv"
 ATTRIBUTE_DATA = "cli_app/data/data_attribute.csv"
 
 def email_validator(email):
     return "@" in email and "." in email
+
+def username_validator(username):
+    if not username:
+        return False, "Username tidak boleh kosong"
+    
+    username = username.strip()
+
+    if len(username) < 4:
+        return False, "Username harus terdiri dari minimal 4 karakter"
+    
+    if len(username) > 16:
+        return False, "Username tidak boleh lebih dari 16 karakter"
+
+    if not re.match(r"^[a-zA-Z0-9_]+$", username):
+        return False, "Username hanya boleh berisi huruf, angka, dan underscore (_)"
+
+    return True, username
+
+def password_validator(password):
+    if not password:
+        return False, "Password tidak boleh kosong"
+    
+    if not re.match(r"^[a-zA-Z0-9_]+$", password):
+        return False, "Password hanya boleh berisi huruf, angka, dan underscore (_)"
+    
+    return True, password
 
 def read_users():
     with open(USER_DATA, newline="", encoding="utf-8") as f:
@@ -31,15 +58,27 @@ def initialize_user_attributes(user_id):
 def register(username, password, email):
     users = read_users()
 
-    # Cek username dengan case-insensitive
-    for u in users:
-        if u["nama_user"].lower() == username.lower():
-            return False, "Username sudah ada"
+    valid, result = username_validator(username)
+    if not valid:
+        return False, result
+    
+    username = result
 
-    new_id = max(int(u["user_id"]) for u in users) + 1 if users else 1
+    valid, result = password_validator(password)
+    if not valid:
+        return False, result
 
     if not email_validator(email):
         return False, "Tolong masukan email yang sesuai"
+
+    # Cek username dengan case-insensitive
+    for u in users:
+        if u["nama_user"].lower() == username.lower():
+            return False, "Username tersebut sudah digunakan"
+        if u["email"].lower() == email.lower():
+            return False, "Email sudah terdaftar"
+        
+    new_id = max(int(u["user_id"]) for u in users) + 1 if users else 1
 
     new_user = {
         "user_id": new_id,
