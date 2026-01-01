@@ -7,7 +7,7 @@ clear()
 
 def main():
     while True:
-        print("\n=== LEVEL UP LIFE CLI ===")
+        header("LEVEL UP LIFE CLI")
         print("1. Login")
         print("2. Register")
         print("3. Keluar")
@@ -23,6 +23,7 @@ def main():
             status, user = login(username, password)
 
             if not status:
+                clear()
                 print("Login gagal:", user)
                 continue
             
@@ -33,7 +34,7 @@ def main():
             
             # Menu utama setelah login
             while True:
-                print("\n=== MENU UTAMA ===")
+                print("\n============== MENU UTAMA ==============")
                 print("1. Tambah Achievement")
                 print("2. Lihat Profile")
                 print("3. Lihat Achievement")
@@ -44,13 +45,15 @@ def main():
                 
                 if menu_choice == "1":
                     clear()
-                    print(f"\n--- Tambah Achievement ---")
                     
                     while True:
+                        print(f"\n----------- Tambah Achievement -----------")
                         text = input("Nama achievement: ")
                         if text.strip(): 
                             break
+                        clear()
                         print("Teks achievement tidak boleh kosong!")
+                    
 
                     while True:
                         print("\nDifficulty: 1.Mudah 2.Sedang 3.Sulit 4.Sangat Sulit")
@@ -60,6 +63,12 @@ def main():
                             continue
                         if not diff.isdigit(): 
                             print("Input harus berupa angka!")
+                            continue
+                        
+                        diff = int(diff)
+
+                        if diff not in range(1,5):
+                            print("Tingkat kesulitan tidak valid")
                             continue
                         break
 
@@ -71,6 +80,12 @@ def main():
                             continue
                         if not kat.isdigit():
                             print("Input harus berupa angka!")
+                            continue
+                        
+                        kat = int(kat)
+
+                        if kat not in range(1,7):
+                            print("Kategori tidak valid")
                             continue
                         break
                     
@@ -95,7 +110,7 @@ def main():
                     print(f"Progress     : {profile['progress_to_next']}")
                     print(f"Achievements : {profile['total_achievements']}")
                     
-                    print("\n=== ATTRIBUTES ===")
+                    print("\n============== ATTRIBUTES ==============")
                     for attr_name, attr_info in profile["attributes"].items():
                         level = attr_info["level"]
                         xp = attr_info["xp"]
@@ -112,7 +127,7 @@ def main():
                     clear()
 
                     name, ach = view_achievement(user_id)
-                    print(f"\n--- Achievement {name} ---")
+                    print(f"\n--------- Achievement {name} ---------")
                     if len(ach) > 0:
                         print(ach.to_string())
                     else:
