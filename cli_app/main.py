@@ -34,7 +34,7 @@ def main():
             
             # Menu utama setelah login
             while True:
-                print("\n========= MENU UTAMA =========")
+                print("\n============== MENU UTAMA ==============")
                 print("1. Tambah Achievement")
                 print("2. Lihat Profile")
                 print("3. Lihat Achievement")
@@ -47,7 +47,7 @@ def main():
                     clear()
                     
                     while True:
-                        print(f"\n--------- Tambah Achievement ---------")
+                        print(f"\n----------- Tambah Achievement -----------")
                         text = input("Nama achievement: ")
                         if text.strip(): 
                             break
@@ -110,7 +110,7 @@ def main():
                     print(f"Progress     : {profile['progress_to_next']}")
                     print(f"Achievements : {profile['total_achievements']}")
                     
-                    print("\n========= ATTRIBUTES =========")
+                    print("\n============== ATTRIBUTES ==============")
                     for attr_name, attr_info in profile["attributes"].items():
                         level = attr_info["level"]
                         xp = attr_info["xp"]
