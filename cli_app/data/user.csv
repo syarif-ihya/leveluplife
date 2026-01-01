@@ -1,8 +1,2 @@
 user_id,nama_user,password,level,total_xp,email
-1,niya,12345678,22,2240,niya@gmail.com
-2,arga,12345678,1,200,arga@gmail.com
-3,testos,os,1,0,ostest@gmail.com
-4,DebugAcc,123,2,75,Debugin@gmail.com
-5,Regisval,123,1,0,Regis@gmail.com
-6,shirin,12345678,3,75,shirin@gmail.com
-7,amalia,mamal,1,50,mamal@gmail.com
+1,admin,123,1,10,admin@gmail.com
