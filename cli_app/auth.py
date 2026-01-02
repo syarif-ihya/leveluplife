@@ -69,7 +69,7 @@ def register(username, password, email):
         return False, result
 
     if not email_validator(email):
-        return False, "Tolong masukan email yang sesuai"
+        return False, "Registrasi gagal: email tidak boleh kosong"
 
     # Cek username dengan case-insensitive
     for u in users:
