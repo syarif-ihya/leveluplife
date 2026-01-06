@@ -1,8 +1,12 @@
+# auth.py
 import csv
 import re
 
 USER_DATA  = "cli_app/data/user.csv"
 ATTRIBUTE_DATA = "cli_app/data/data_attribute.csv"
+
+# MODIFIKASI MINOR: Gunakan tuple untuk attributes (immutable data)
+ATTRIBUTE_TYPES = ('Intellect', 'Creativity', 'Vitality', 'Discipline', 'Social', 'Wealth')
 
 def email_validator(email):
     return "@" in email and "." in email
@@ -47,12 +51,10 @@ def write_users(users):
         writer.writerows(users)
 
 def initialize_user_attributes(user_id):
-    """Inisialisasi 6 attribute untuk user baru"""
-    attributes = ['Intellect', 'Creativity', 'Vitality', 'Discipline', 'Social', 'Wealth']
-    
+    """Inisialisasi 6 attribute untuk user baru - MODIFIKASI: gunakan tuple"""
     with open(ATTRIBUTE_DATA, "a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        for attr in attributes:
+        for attr in ATTRIBUTE_TYPES:  # Gunakan tuple
             writer.writerow([user_id, attr, 1, 0])
 
 def register(username, password, email):
@@ -69,7 +71,7 @@ def register(username, password, email):
         return False, result
 
     if not email_validator(email):
-        return False, "Tolong masukan email yang sesuai"
+        return False, "Registrasi gagal: email tidak boleh kosong"
 
     # Cek username dengan case-insensitive
     for u in users:

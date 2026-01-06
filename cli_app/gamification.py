@@ -3,6 +3,11 @@ import pandas as pd
 import csv
 from datetime import datetime 
 
+# ========== TAMBAHAN: Tuple untuk data immutable ==========
+DIFFICULTY_LEVELS = ('Mudah', 'Sedang', 'Sulit', 'Sangat Sulit')  # Tuple
+ATTRIBUTE_TYPES = ('Intellect', 'Creativity', 'Vitality', 'Discipline', 'Social', 'Wealth')  # Tuple
+
+
 # Utility Function
 def xp_required(level):
     """Hitung XP yang dibutuhkan untuk naik ke level berikutnya"""
@@ -37,16 +42,15 @@ def update_attribute(user_id, category, xp_gain):
         writer.writerows(rows)
 
 
-# add achievement
+# add achievement - DIMODIFIKASI: gunakan Tuple
 def add_achievement(user_id, text, difficulty, category):
+    # Gunakan tuple yang sudah didefinisikan
     difficulty_type = {
-        "Mudah": 10,
-        "Sedang": 25,
-        "Sulit": 50,
-        "Sangat Sulit": 100
+        DIFFICULTY_LEVELS[0]: 10,   # Mudah
+        DIFFICULTY_LEVELS[1]: 25,   # Sedang
+        DIFFICULTY_LEVELS[2]: 50,   # Sulit
+        DIFFICULTY_LEVELS[3]: 100   # Sangat Sulit
     }
-
-    category_type = ['Intellect', 'Creativity', 'Vitality', 'Discipline', 'Social', 'Wealth']
     
     if not text or str(text).strip() == "":
         return {"status": False, "message": "Teks achievement tidak boleh kosong!", "attribute": "", "xp_gained": 0}
@@ -59,22 +63,21 @@ def add_achievement(user_id, text, difficulty, category):
     
     difficulty = int(difficulty)
     d_index = difficulty - 1
-    keys = list(difficulty_type.keys())
 
-    if d_index < 0 or d_index >= len(keys):
+    if d_index < 0 or d_index >= len(DIFFICULTY_LEVELS):
         return {"status": False, "message": "Tingkat kesulitan tidak valid!", "attribute": "", "xp_gained": 0}
     
-    d_selected = keys[d_index]
+    d_selected = DIFFICULTY_LEVELS[d_index]
     
     if not str(category).isdigit():
         return {"status": False, "message": "Input harus berupa angka!", "attribute": "", "xp_gained": 0}
     
     category = int(category)
     c_index = category - 1
-    if c_index < 0 or c_index >= len(category_type):
+    if c_index < 0 or c_index >= len(ATTRIBUTE_TYPES):
         return {"status": False, "message": "Kategori tidak valid!", "attribute": "", "xp_gained": 0}
     
-    category_selected = category_type[c_index]
+    category_selected = ATTRIBUTE_TYPES[c_index]
     
     date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
@@ -152,7 +155,7 @@ def data_user_achievement(user_id):
     return user, achievement
 
 
-# view profile
+# view profile - DIMODIFIKASI: tambahkan completed_categories (Set)
 def view_profile(user_id):
     user, achievement = data_user_achievement(user_id)
     
@@ -192,11 +195,11 @@ def view_profile(user_id):
         "total_xp": xp,
         "progress_to_next": f"{xp}/{xp_needed} XP ({progress_pct:.1f}%)",
         "total_achievements": total_achi,
-        "attributes": attributes
+        "attributes": attributes,
     }
 
 
-# view achievement
+# view achievement (default)
 def view_achievement(user_id):
     user, achievement = data_user_achievement(user_id)
 
@@ -208,3 +211,67 @@ def view_achievement(user_id):
         return name, ach_display
     else:
         return name, pd.DataFrame()
+
+
+# ========== TAMBAHAN: SORTING ==========
+def view_achievement_sorted(user_id, sort_by='datetime', reverse=False):
+    """
+    Sorting achievement berdasarkan kriteria
+    sort_by: 'datetime', 'difficulty', 'category'
+    reverse: True untuk descending, False untuk ascending
+    """
+    user, achievement = data_user_achievement(user_id)
+    name = user['nama_user']
+    
+    if len(achievement) > 0:
+        # Sorting menggunakan pandas sort_values
+        if sort_by == 'difficulty':
+            # Buat mapping untuk sorting difficulty
+            difficulty_order = {
+                'Mudah': 1, 
+                'Sedang': 2, 
+                'Sulit': 3, 
+                'Sangat Sulit': 4
+            }
+            achievement = achievement.sort_values(
+                by='difficulty', 
+                key=lambda x: x.map(difficulty_order),
+                ascending=not reverse
+            )
+        elif sort_by == 'category':
+            achievement = achievement.sort_values(by='category', ascending=not reverse)
+        else:  # datetime
+            achievement = achievement.sort_values(by='datetime', ascending=not reverse)
+        
+        ach_display = achievement[['text', 'difficulty', 'category', 'datetime']].reset_index(drop=True)
+        ach_display.index = ach_display.index + 1
+        return name, ach_display
+    else:
+        return name, pd.DataFrame()
+
+
+# ========== TAMBAHAN: SEARCHING  ==========
+def search_achievement(user_id, keyword):
+    """
+    Mencari achievement berdasarkan keyword di text atau category
+    Menggunakan teknik linear search
+    """
+    user, achievement = data_user_achievement(user_id)
+    name = user['nama_user']
+    
+    if len(achievement) > 0:
+        # Linear search: filter berdasarkan keyword (case-insensitive)
+        keyword_lower = keyword.lower()
+        filtered = achievement[
+            achievement['text'].str.lower().str.contains(keyword_lower, na=False) |
+            achievement['category'].str.lower().str.contains(keyword_lower, na=False)
+        ]
+        
+        if len(filtered) > 0:
+            ach_display = filtered[['text', 'difficulty', 'category', 'datetime']].reset_index(drop=True)
+            ach_display.index = ach_display.index + 1
+            return name, ach_display, True
+        else:
+            return name, pd.DataFrame(), False
+    else:
+        return name, pd.DataFrame(), False
