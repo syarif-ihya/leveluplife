@@ -5,7 +5,11 @@ from gamification import (
     view_profile, 
     view_achievement,
     view_achievement_sorted, 
-    search_achievement,      
+    search_achievement,
+    get_edit_achievement,
+    edit_achievement,      
+    input_difficulty,
+    input_category,
     DIFFICULTY_LEVELS,      
     ATTRIBUTE_TYPES      
 )
@@ -140,7 +144,6 @@ def main():
                     divider()
 
                 elif menu_choice == "3":
-                    # MODIFIKASI BESAR: Menu achievement dengan sorting & searching
                     info_message = ""
                     name, ach = view_achievement(user_id)
 
@@ -152,6 +155,8 @@ def main():
 
                         if info_message:
                             print("\n",info_message,"\n")
+                            info_message = ""
+
 
                         if len(ach) > 0:
                             print(ach.to_string())
@@ -161,7 +166,8 @@ def main():
                         print("\n\n======== ACHIEVEMENT MENU ========")
                         print("1. Urutkan Achievement (Sort)")
                         print("2. Cari Achievement (Search)")
-                        print("3. Kembali")
+                        print("3. Edit Achievement")
+                        print("4. Kembali")
                         divider()
                         
                         ach_choice = input("Pilih (1-4): ")
@@ -217,7 +223,7 @@ def main():
                             
                             if keyword.strip():
                                 _, result, found = search_achievement(user_id, keyword)
-                                # clear()
+
                                 print(f"\n--- Hasil Pencarian '{keyword}' ---")
                                 if found:
                                     ach = result
@@ -230,14 +236,75 @@ def main():
                                 clear()
                                 print("Keyword tidak boleh kosong!")
                         
+                        
+                        elif ach_choice == "3":
+                            # EDIT ACHIEVEMENT
+                            clear()
+
+                            name, ach = view_achievement(user_id)
+                            print("\n======== EDIT ACHIEVEMENT ========")
+
+                            if len(ach) > 0:
+                                print(ach.to_string())
+                            else:
+                                print("Belum ada achievement.")
+
+                            id_achievement = input("\nMasukkan ID achievement yang ingin diubah: ")
+
+                            if not id_achievement.isdigit():
+                                info_message = "ID harus berupa angka!"
+                                continue
+
+                            id_achievement = int(id_achievement)
+
+                            result = get_edit_achievement(user_id, id_achievement)
+
+                            if result is None:
+                                info_message = "Achievement tidak ditemukan!"
+                                continue
+                            else:
+                                text, difficulty, category = result
+
+                            print("\n--- Data Lama ---")
+                            print(f"Text      : {text}")
+                            print(f"Difficulty: {difficulty}")
+                            print(f"Category  : {category}")
+
+                            print("\n\n--- Data Baru ---")
+                            print("Kosongkan dan klik enter pada data yang tidak ingin diubah")
+                            new_text = input("\nNama achievement:")
+                            if not new_text.strip(): 
+                                new_text = text
+
+                            new_diff = input_difficulty(allow_empty=True)
+
+                            new_cate  = input_category(allow_empty=True)
+
+                            success = edit_achievement(
+                                user_id = user_id, 
+                                achievement_id = id_achievement, 
+                                new_text = new_text,
+                                new_diff = new_diff,
+                                new_cate = new_cate
+                            )
+
+                            name, ach = view_achievement(user_id)
+                            if success:
+                                print("\nData achievement berhasil diperbarui!")
+                            else:
+                                print("\nAchievement gagal diperbarui!")
+                                
+                            info_message = "Data achievement berhasil diperbarui!"
+
                         elif ach_choice == "4":
                             clear()
                             break
                         else:
                             clear()
                             print("Pilihan tidak valid!")
+
                 
-                elif menu_choice == "3":
+                elif menu_choice == "4":
                     clear()
 
                     print("Logout berhasil.")
