@@ -17,3 +17,9 @@ user_id,attribute,level,xp
 3,Discipline,1,50
 3,Social,1,0
 3,Wealth,1,50
+4,Intellect,2,25
+4,Creativity,1,35
+4,Vitality,1,0
+4,Discipline,1,0
+4,Social,1,0
+4,Wealth,1,10

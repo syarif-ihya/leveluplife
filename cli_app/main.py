@@ -141,96 +141,103 @@ def main():
 
                 elif menu_choice == "3":
                     # MODIFIKASI BESAR: Menu achievement dengan sorting & searching
-                    clear()
-                    
-                    print("\n======== ACHIEVEMENT MENU ========")
-                    print("1. Lihat Semua Achievement")
-                    print("2. Urutkan Achievement (Sort)")
-                    print("3. Cari Achievement (Search)")
-                    print("4. Kembali")
-                    divider()
-                    
-                    ach_choice = input("Pilih (1-4): ")
-                    
-                    if ach_choice == "1":
-                        # Lihat semua achievement (default)
+                    info_message = ""
+                    name, ach = view_achievement(user_id)
+
+                    while True:
                         clear()
-                        name, ach = view_achievement(user_id)
+
+                        # Tampilkan semua data
                         print(f"\n--------- Achievement {name} ---------")
+
+                        if info_message:
+                            print("\n",info_message,"\n")
+
                         if len(ach) > 0:
                             print(ach.to_string())
                         else:
                             print("Belum ada achievement.")
-                    
-                    elif ach_choice == "2":
-                        # SORTING ACHIEVEMENT
-                        clear()
-                        print("\n======== SORT ACHIEVEMENT ========")
-                        print("1. Urutkan berdasarkan Tanggal (Terbaru)")
-                        print("2. Urutkan berdasarkan Tanggal (Terlama)")
-                        print("3. Urutkan berdasarkan Difficulty (Mudah-Sulit)")
-                        print("4. Urutkan berdasarkan Difficulty (Sulit-Mudah)")
-                        print("5. Urutkan berdasarkan Category (A-Z)")
+                        
+                        print("\n\n======== ACHIEVEMENT MENU ========")
+                        print("1. Urutkan Achievement (Sort)")
+                        print("2. Cari Achievement (Search)")
+                        print("3. Kembali")
                         divider()
                         
-                        sort_choice = input("Pilih (1-5): ")
+                        ach_choice = input("Pilih (1-4): ")
                         
-                        sort_config = {
-                            '1': ('datetime', True),   # Terbaru dulu
-                            '2': ('datetime', False),  # Terlama dulu
-                            '3': ('difficulty', False), # Mudah ke Sulit
-                            '4': ('difficulty', True),  # Sulit ke Mudah
-                            '5': ('category', False)   # A-Z
-                        }
-                        
-                        if sort_choice in sort_config:
-                            sort_by, reverse = sort_config[sort_choice]
+                        if ach_choice == "1":
+                            # SORTING ACHIEVEMENT
                             clear()
-                            name, ach = view_achievement_sorted(user_id, sort_by=sort_by, reverse=reverse)
+                            print("\n======== SORT ACHIEVEMENT ========")
+                            print("1. Urutkan berdasarkan Tanggal (Terbaru)")
+                            print("2. Urutkan berdasarkan Tanggal (Terlama)")
+                            print("3. Urutkan berdasarkan Difficulty (Mudah-Sulit)")
+                            print("4. Urutkan berdasarkan Difficulty (Sulit-Mudah)")
+                            print("5. Urutkan berdasarkan Category (A-Z)")
+                            divider()
                             
-                            sort_labels = {
-                                '1': 'Tanggal (Terbaru)',
-                                '2': 'Tanggal (Terlama)',
-                                '3': 'Difficulty (Mudah-Sulit)',
-                                '4': 'Difficulty (Sulit-Mudah)',
-                                '5': 'Category (A-Z)'
+                            sort_choice = input("Pilih (1-5): ")
+                            
+                            sort_config = {
+                                '1': ('datetime', True),   # Terbaru dulu
+                                '2': ('datetime', False),  # Terlama dulu
+                                '3': ('difficulty', False), # Mudah ke Sulit
+                                '4': ('difficulty', True),  # Sulit ke Mudah
+                                '5': ('category', False)   # A-Z
                             }
                             
-                            print(f"\n--- Achievement {name} ({sort_labels[sort_choice]}) ---")
-                            if len(ach) > 0:
-                                print(ach.to_string())
+                            if sort_choice in sort_config:
+                                sort_by, reverse = sort_config[sort_choice]
+                                clear()
+                                name, ach = view_achievement_sorted(user_id, sort_by=sort_by, reverse=reverse)
+                                
+                                sort_labels = {
+                                    '1': 'Tanggal (Terbaru)',
+                                    '2': 'Tanggal (Terlama)',
+                                    '3': 'Difficulty (Mudah-Sulit)',
+                                    '4': 'Difficulty (Sulit-Mudah)',
+                                    '5': 'Category (A-Z)'
+                                }
+                                
+                                print(f"\n--- Achievement {name} ({sort_labels[sort_choice]}) ---")
+                                if len(ach) > 0:
+                                    print(ach.to_string())
+                                else:
+                                    print("Belum ada achievement.")
                             else:
-                                print("Belum ada achievement.")
+                                clear()
+                                print("Pilihan tidak valid!")
+                        
+                        elif ach_choice == "2":
+                            # SEARCHING ACHIEVEMENT
+                            clear()
+                            print("\n======== SEARCH ACHIEVEMENT ========")
+                            keyword = input("Masukkan keyword (nama/kategori): ")
+                            
+                            if keyword.strip():
+                                _, result, found = search_achievement(user_id, keyword)
+                                # clear()
+                                print(f"\n--- Hasil Pencarian '{keyword}' ---")
+                                if found:
+                                    ach = result
+                                    info_message = f"Ditemukan {len(ach)} achievement:"
+
+                                else:
+                                    ach = ach.iloc[0:0]
+                                    info_message = "Tidak ada achievement yang cocok."
+                            else:
+                                clear()
+                                print("Keyword tidak boleh kosong!")
+                        
+                        elif ach_choice == "4":
+                            clear()
+                            break
                         else:
                             clear()
                             print("Pilihan tidak valid!")
-                    
-                    elif ach_choice == "3":
-                        # SEARCHING ACHIEVEMENT
-                        clear()
-                        print("\n======== SEARCH ACHIEVEMENT ========")
-                        keyword = input("Masukkan keyword (nama/kategori): ")
-                        
-                        if keyword.strip():
-                            name, ach, found = search_achievement(user_id, keyword)
-                            clear()
-                            print(f"\n--- Hasil Pencarian '{keyword}' ---")
-                            if found:
-                                print(f"Ditemukan {len(ach)} achievement:")
-                                print(ach.to_string())
-                            else:
-                                print("Tidak ada achievement yang cocok.")
-                        else:
-                            clear()
-                            print("Keyword tidak boleh kosong!")
-                    
-                    elif ach_choice == "4":
-                        clear()
-                    else:
-                        clear()
-                        print("Pilihan tidak valid!")
                 
-                elif menu_choice == "4":
+                elif menu_choice == "3":
                     clear()
 
                     print("Logout berhasil.")
