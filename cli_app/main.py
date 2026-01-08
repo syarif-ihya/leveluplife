@@ -145,7 +145,9 @@ def main():
 
                 elif menu_choice == "3":
                     info_message = ""
-                    name, ach = view_achievement(user_id)
+                    name, all_ach = view_achievement(user_id)
+
+                    ach = all_ach.copy()
 
                     while True:
                         clear()
@@ -158,12 +160,14 @@ def main():
                             info_message = ""
 
 
-                        if len(ach) > 0:
+                        if len(all_ach) == 0:
+                            print("Belum ada achievement.")
+                        elif len(ach) > 0:
                             print(ach.to_string())
                         else:
-                            print("Belum ada achievement.")
+                            print("Tidak ada achievement yang cocok.")
                         
-                        print("\n\n======== ACHIEVEMENT MENU ========")
+                        print("\n\n=========== ACHIEVEMENT MENU ===========")
                         print("1. Urutkan Achievement (Sort)")
                         print("2. Cari Achievement (Search)")
                         print("3. Edit Achievement")
@@ -230,8 +234,7 @@ def main():
                                     info_message = f"Ditemukan {len(ach)} achievement:"
 
                                 else:
-                                    ach = ach.iloc[0:0]
-                                    info_message = "Tidak ada achievement yang cocok."
+                                    ach = result
                             else:
                                 clear()
                                 print("Keyword tidak boleh kosong!")
