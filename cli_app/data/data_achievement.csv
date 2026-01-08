@@ -9,3 +9,5 @@ achievement_id,user_id,text,difficulty,category,datetime
 7,4,punya temen baru,Sedang,Creativity,2026-01-07 17:30:36
 8,4,bikin dfd 1 sama 2,Sangat Sulit,Intellect,2026-01-07 17:34:04
 9,4,on progress fitur edit,Sangat Sulit,Intellect,2026-01-07 23:22:34
+10,1,Debugging,Sulit,Intellect,2026-01-08 10:35:57
+11,1,Testing & Rechecking,Sedang,Intellect,2026-01-08 10:36:56

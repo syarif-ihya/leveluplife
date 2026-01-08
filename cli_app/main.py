@@ -145,25 +145,26 @@ def main():
 
                 elif menu_choice == "3":
                     info_message = ""
-                    name, ach = view_achievement(user_id)
+                    name, all_ach = view_achievement(user_id)
+                    ach = all_ach.copy()
 
                     while True:
                         clear()
 
-                        # Tampilkan semua data
-                        print(f"\n--------- Achievement {name} ---------")
-
                         if info_message:
-                            print("\n",info_message,"\n")
-                            info_message = ""
+                            print("\n",info_message)
 
+                        # Tampilkan semua data
+                        print(f"\n--------- Achievement {name} ---------\n")
 
-                        if len(ach) > 0:
+                        if len(all_ach) == 0:
+                            print("Belum ada achievement.")
+                        elif len(ach) > 0:
                             print(ach.to_string())
                         else:
-                            print("Belum ada achievement.")
+                            print("Tidak ada achievement yang cocok.")
                         
-                        print("\n\n======== ACHIEVEMENT MENU ========")
+                        print("\n=========== ACHIEVEMENT MENU ===========")
                         print("1. Urutkan Achievement (Sort)")
                         print("2. Cari Achievement (Search)")
                         print("3. Edit Achievement")
@@ -171,6 +172,8 @@ def main():
                         divider()
                         
                         ach_choice = input("Pilih (1-4): ")
+                        if ach_choice in ["1","2","3","4"]:
+                            info_message = ""
                         
                         if ach_choice == "1":
                             # SORTING ACHIEVEMENT
@@ -197,7 +200,7 @@ def main():
                                 sort_by, reverse = sort_config[sort_choice]
                                 clear()
                                 name, ach = view_achievement_sorted(user_id, sort_by=sort_by, reverse=reverse)
-                                
+                            
                                 sort_labels = {
                                     '1': 'Tanggal (Terbaru)',
                                     '2': 'Tanggal (Terlama)',
@@ -212,9 +215,8 @@ def main():
                                 else:
                                     print("Belum ada achievement.")
                             else:
-                                clear()
-                                print("Pilihan tidak valid!")
-                        
+                                info_message = "Pilihan sort tidak valid!"
+                                
                         elif ach_choice == "2":
                             # SEARCHING ACHIEVEMENT
                             clear()
@@ -223,18 +225,14 @@ def main():
                             
                             if keyword.strip():
                                 _, result, found = search_achievement(user_id, keyword)
+                                ach = result
+
 
                                 print(f"\n--- Hasil Pencarian '{keyword}' ---")
                                 if found:
-                                    ach = result
                                     info_message = f"Ditemukan {len(ach)} achievement:"
-
-                                else:
-                                    ach = ach.iloc[0:0]
-                                    info_message = "Tidak ada achievement yang cocok."
                             else:
-                                clear()
-                                print("Keyword tidak boleh kosong!")
+                                info_message = "Keyword tidak boleh kosong!"
                         
                         
                         elif ach_choice == "3":
@@ -247,7 +245,7 @@ def main():
                             if len(ach) > 0:
                                 print(ach.to_string())
                             else:
-                                print("Belum ada achievement.")
+                                info_message = "Belum ada achievement."
 
                             id_achievement = input("\nMasukkan ID achievement yang ingin diubah: ")
 
@@ -290,9 +288,11 @@ def main():
 
                             name, ach = view_achievement(user_id)
                             if success:
-                                print("\nData achievement berhasil diperbarui!")
+
+                                info_message = "\nData achievement berhasil diperbarui!"
                             else:
-                                print("\nAchievement gagal diperbarui!")
+
+                                info_message = "\nAchievement gagal diperbarui!"
                                 
                             info_message = "Data achievement berhasil diperbarui!"
 
@@ -300,8 +300,8 @@ def main():
                             clear()
                             break
                         else:
-                            clear()
-                            print("Pilihan tidak valid!")
+
+                            info_message = "Pilihan tidak valid!"
 
                 
                 elif menu_choice == "4":
