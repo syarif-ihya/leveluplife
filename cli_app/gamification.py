@@ -3,12 +3,11 @@ import pandas as pd
 import csv
 from datetime import datetime 
 
-# ========== TAMBAHAN: Tuple untuk data immutable ==========
-DIFFICULTY_LEVELS = ('Mudah', 'Sedang', 'Sulit', 'Sangat Sulit')  # Tuple
-ATTRIBUTE_TYPES = ('Intellect', 'Creativity', 'Vitality', 'Discipline', 'Social', 'Wealth')  # Tuple
+DIFFICULTY_LEVELS = ('Mudah', 'Sedang', 'Sulit', 'Sangat Sulit')  
+ATTRIBUTE_TYPES = ('Intellect', 'Creativity', 'Vitality', 'Discipline', 'Social', 'Wealth')
 
 
-# Utility Function
+# utility function
 def xp_required(level):
     """Hitung XP yang dibutuhkan untuk naik ke level berikutnya"""
     return 50 + (level * 25)
@@ -42,9 +41,22 @@ def update_attribute(user_id, category, xp_gain):
         writer.writerows(rows)
 
 
-# add achievement - DIMODIFIKASI: gunakan Tuple
+# ambil id achievement
+def id_achievement():
+    with open("cli_app/data/data_achievement.csv", "r", encoding="utf-8") as file:
+        reader = list(csv.reader(file))
+        
+        if len(reader) <= 1:
+            return 1
+        
+        id = int(reader[-1][0])
+        return id + 1
+
+
+# add achievement
 def add_achievement(user_id, text, difficulty, category):
-    # Gunakan tuple yang sudah didefinisikan
+    id = id_achievement()
+
     difficulty_type = {
         DIFFICULTY_LEVELS[0]: 10,   # Mudah
         DIFFICULTY_LEVELS[1]: 25,   # Sedang
@@ -83,7 +95,7 @@ def add_achievement(user_id, text, difficulty, category):
     
     with open("cli_app/data/data_achievement.csv", "a", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow([user_id, text, d_selected, category_selected, date])
+        writer.writerow([id, user_id, text, d_selected, category_selected, date])
 
     # Update attribute XP
     update_attribute(user_id, category_selected, difficulty_type[d_selected])
@@ -99,7 +111,7 @@ def add_achievement(user_id, text, difficulty, category):
     }
 
 
-# proses XP achievement dengan threshold DINAMIS
+# proses XP achievement
 def process_achievement(user_id, difficulty):
     difficulty_type = {
         1: 10,   # Mudah
@@ -155,7 +167,7 @@ def data_user_achievement(user_id):
     return user, achievement
 
 
-# view profile - DIMODIFIKASI: tambahkan completed_categories (Set)
+# view profile
 def view_profile(user_id):
     user, achievement = data_user_achievement(user_id)
     
@@ -206,20 +218,17 @@ def view_achievement(user_id):
     name = user['nama_user']
     
     if len(achievement) > 0:
-        ach_display = achievement[['text', 'difficulty', 'category', 'datetime']].reset_index(drop=True)
+        ach_display = achievement[['achievement_id','text', 'difficulty', 'category', 'datetime']].reset_index(drop=True)
         ach_display.index = ach_display.index + 1  # Mulai dari 1
+
+        ach_display.columns = ['ID', 'Text', 'Difficulty', 'Category', 'Datetime']
         return name, ach_display
     else:
         return name, pd.DataFrame()
 
 
-# ========== TAMBAHAN: SORTING ==========
+# sort achievement
 def view_achievement_sorted(user_id, sort_by='datetime', reverse=False):
-    """
-    Sorting achievement berdasarkan kriteria
-    sort_by: 'datetime', 'difficulty', 'category'
-    reverse: True untuk descending, False untuk ascending
-    """
     user, achievement = data_user_achievement(user_id)
     name = user['nama_user']
     
@@ -250,12 +259,8 @@ def view_achievement_sorted(user_id, sort_by='datetime', reverse=False):
         return name, pd.DataFrame()
 
 
-# ========== TAMBAHAN: SEARCHING  ==========
+# search achievement
 def search_achievement(user_id, keyword):
-    """
-    Mencari achievement berdasarkan keyword di text atau category
-    Menggunakan teknik linear search
-    """
     user, achievement = data_user_achievement(user_id)
     name = user['nama_user']
     
@@ -275,3 +280,100 @@ def search_achievement(user_id, keyword):
             return name, pd.DataFrame(), False
     else:
         return name, pd.DataFrame(), False
+    
+
+# get data untuk edit
+def get_edit_achievement(user_id, achievement_id):
+    user, achievement = data_user_achievement(user_id)
+    name = user['nama_user']
+
+    if len(achievement) == 0:
+        return None
+    
+    target = achievement[achievement['achievement_id'] == achievement_id]
+
+    if target.empty:
+        return None
+    
+    row = target.iloc[0]
+
+    text = row['text']
+    difficulty = row['difficulty']
+    category = row['category']
+
+    return text, difficulty, category
+
+
+# edit achievement
+def edit_achievement(user_id, achievement_id, new_text, new_diff, new_cate):
+    df = pd.read_csv("cli_app/data/data_achievement.csv")
+
+    achievement_id = int(achievement_id)
+
+    line = (df['achievement_id'] == achievement_id) & (df['user_id'] == user_id)
+
+    if new_text is not None:
+        df.loc[line, 'text'] = new_text
+
+    if new_diff is not None:
+        df.loc[line, 'difficulty'] = DIFFICULTY_LEVELS[new_diff - 1]
+
+    if new_cate is not None:
+        df.loc[line, 'category'] = ATTRIBUTE_TYPES[new_cate - 1]
+
+    df.to_csv("cli_app/data/data_achievement.csv", index=False)
+
+    return True
+
+
+# form input difficult dan category untuk edit
+def input_difficulty(allow_empty=False):
+    while True:
+        print("\nDifficulty:")
+        for i, level in enumerate(DIFFICULTY_LEVELS, 1):
+            print(f"  {i}. {level}")
+
+        diff = input("Pilih (1-4): ")
+
+        if allow_empty and not diff.strip():
+            return None
+
+        if not diff.strip():
+            print("Tingkat kesulitan tidak boleh kosong!")
+            continue
+        if not diff.isdigit():
+            print("Input harus berupa angka!")
+            continue
+
+        diff = int(diff)
+        if diff not in range(1, len(DIFFICULTY_LEVELS) + 1):
+            print("Tingkat kesulitan tidak valid!")
+            continue
+
+        return diff
+
+def input_category(allow_empty=False):
+    while True:
+        print("\nCategory:")
+        for i, attr in enumerate(ATTRIBUTE_TYPES, 1):
+            print(f"  {i}. {attr}")
+
+        kat = input("Pilih Kategori (1-6): ")
+
+        if allow_empty and not kat.strip():
+            return None
+
+        if not kat.strip():
+            print("Kategori tidak boleh kosong!")
+            continue
+
+        if not kat.isdigit():
+            print("Input harus berupa angka!")
+            continue
+
+        kat = int(kat)
+        if kat not in range(1, len(ATTRIBUTE_TYPES) + 1):
+            print("Kategori tidak valid!")
+            continue
+
+        return kat
