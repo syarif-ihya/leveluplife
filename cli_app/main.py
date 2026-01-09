@@ -155,7 +155,7 @@ def main():
                             print("\n",info_message)
 
                         # Tampilkan semua data
-                        print(f"\n--------- Achievement {name} ---------\n")
+                        header(f"ACHIEVEMENT - {name}")
 
                         if len(all_ach) == 0:
                             print("Belum ada achievement.")
@@ -240,7 +240,7 @@ def main():
                             clear()
 
                             name, ach = view_achievement(user_id)
-                            print("\n======== EDIT ACHIEVEMENT ========")
+                            print("\n=========== EDIT ACHIEVEMENT ===========")
 
                             if len(ach) > 0:
                                 print(ach.to_string())
@@ -263,13 +263,14 @@ def main():
                             else:
                                 text, difficulty, category = result
 
-                            print("\n--- Data Lama ---")
+                            print("\n---- Data Lama ----")
                             print(f"Text      : {text}")
                             print(f"Difficulty: {difficulty}")
                             print(f"Category  : {category}")
 
-                            print("\n\n--- Data Baru ---")
-                            print("Kosongkan dan klik enter pada data yang tidak ingin diubah")
+                            print("\n\n---- Data Baru ----")
+                            print("Catatan: Perubahan achievement tidak akan memengaruhi XP dan atribut yang telah diperoleh.")
+                            print("Kosongkan dan klik enter pada data yang tidak ingin diubah.")
                             new_text = input("\nNama achievement:")
                             if not new_text.strip(): 
                                 new_text = text
@@ -277,6 +278,11 @@ def main():
                             new_diff = input_difficulty(allow_empty=True)
 
                             new_cate  = input_category(allow_empty=True)
+
+                            confirm = input("\nApakah Anda yakin ingin menyimpan perubahan ini? (Y/N): ").strip().lower()
+                            if confirm != "y":
+                                info_message = "Perubahan dibatalkan"
+                                continue
 
                             success = edit_achievement(
                                 user_id = user_id, 
@@ -288,13 +294,9 @@ def main():
 
                             name, ach = view_achievement(user_id)
                             if success:
-
                                 info_message = "\nData achievement berhasil diperbarui!"
                             else:
-
                                 info_message = "\nAchievement gagal diperbarui!"
-                                
-                            info_message = "Data achievement berhasil diperbarui!"
 
                         elif ach_choice == "4":
                             clear()
