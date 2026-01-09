@@ -1,26 +1,3 @@
-<<<<<<< Updated upstream
-user_id,text,difficulty,kategori,datetime
-1, p, pp, Sedang, Creativity
-1, a, asdf, Sedang, Creativity
-1, e, eee, Sangat Sulit, Dicipline
-1, g, Sangat Sulit, Creativity
-1, i, Sulit, Creativity
-1, ggg, Sulit, Vitality
-1, f, Sangat Sulit, Vitality
-1, test, Sangat Sulit, Creativity
-1, cek bener, Sangat Sulit, Vitality
-1, CEKKK, Sangat Sulit, Creativity
-1, cek lagi pls bener, Sangat Sulit, Intellect
-1, bismillah bener , Sangat Sulit, Vitality
-1, next, Sangat Sulit, Vitality
-1, XXX, bla bla bla, Sulit, Social
-1, ow, Sangat Sulit, Intellect, 2025-12-16 13:14:27.179304,
-1, yhh, Sedang, Intellect, 2025-12-16 13:17:01.396216,
-1, ok, Sulit, Vitality, 2025-12-16 13:18:45,
-1, uy, Sedang, Creativity, 2025-12-16 15:05:40,
-1, yey, Sedang, Creativity, 2025-12-16 15:09:54
-1, yey, Sedang, Creativity, 2025-12-16 15:10:19
-=======
 achievement_id,user_id,text,difficulty,category,datetime
 1,1,Uni Reset,Mudah,Intellect,2026-01-01 11:42:19
 2,3,membuat ppt,Mudah,Creativity,2026-01-06 12:52:15
@@ -40,4 +17,3 @@ achievement_id,user_id,text,difficulty,category,datetime
 15,5,touch some grass,Sangat Sulit,Social,2026-01-09 09:33:08
 16,5,bengong 3 jam,Sulit,Vitality,2026-01-09 09:39:32
 17,5,puasa daud,Sedang,Wealth,2026-01-09 09:40:37
->>>>>>> Stashed changes
