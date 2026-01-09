@@ -10,3 +10,5 @@ achievement_id,user_id,text,difficulty,category,datetime
 9,4,on progress fitur edit,Sangat Sulit,Intellect,2026-01-07 23:22:34
 10,1,Debugging,Sulit,Intellect,2026-01-08 10:35:57
 11,1,Testing & Rechecking,Sedang,Intellect,2026-01-08 10:36:56
+12,1,Adding Confirmation,Sedang,Intellect,2026-01-09 07:19:59
+13,1,Second Rechecking,Sangat Sulit,Intellect,2026-01-09 07:27:54
