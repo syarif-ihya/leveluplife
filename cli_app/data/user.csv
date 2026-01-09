@@ -1,6 +1,15 @@
+<<<<<<< Updated upstream
 user_id,nama_user,level,total_xp
 1,niya,1,1300
 2,arga,1,200
 3,dapa,2,1300
 4,khasyi,4,4100
 5,shirin,2,2010
+=======
+user_id,nama_user,password,level,total_xp,email
+1,admin,123,2,20,admin@gmail.com
+2,Arga,123,1,0,arga@gmail.com
+3,shirin,12345678,3,35,shirin@gmail.com
+4,amalia,mamal,3,70,amalia@gmail.com
+5,test,1234,4,35,admin@example.com
+>>>>>>> Stashed changes
